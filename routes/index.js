@@ -46,4 +46,25 @@ router.post('/books/add', (req, res, next) => {
   })
 });
 
+router.get('/books/edit', (req, res, next) => {
+  Book.findOne({_id: req.query.book_id})
+  .then((book) => {
+    res.render("book-edit", {book})
+  })
+  .catch((error) => {
+    console.log(error)
+  })
+});
+
+router.post('/books/edit', (req, res, next) => {
+  const { title, author, description, rating } = req.body;
+  Book.update({_id: req.query.book_id}, { $set: {title, author, description, rating }}, { new: true })
+  .then((book) => {
+    res.redirect('/books')
+  })
+  .catch((error) => {
+    console.log(error)
+  })
+});
+
 module.exports = router;
